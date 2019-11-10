@@ -1,0 +1,34 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Kern\PictureBundle\:
+        resource: '../../*'
+        exclude: '../../{DataFixtures/fixtures,DependencyInjection,PictureBundle,Entity,Migrations,Tests,Kernel.php}'
+
+    Kern\PictureBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Kern\PictureBundle\Command\ProcessPictureCommand:
+        arguments:
+            $uploadDir: "%kpb_upload_dir%"
+
+    Kern\PictureBundle\Manager\PictureManager:
+        arguments:
+            $uploadDir: "%kpb_upload_dir%"
+
+    Kern\PictureBundle\EventListener\PictureListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate }
+
+    Kern\PictureBundle\EventListener\PictureUploaderMapper:
+        arguments:
+            $userClass: "%kpb_user_class%"
+        tags:
+            -
+                name: 'doctrine.event_listener'
+                event: 'loadClassMetadata'
+                entity: 'Kern\PictureBundle\Entity\Picture'
+                lazy: true

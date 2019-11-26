@@ -28,15 +28,22 @@ class PictureController extends AbstractController
 
     /**
      * @Route("/pictures/{hash}", name="get_picture", methods={"GET"})
-     * @Route("/pictures/{hash}/{format}", name="get_formatted_picture", methods={"GET"})
      */
-    public function getPicture(string $hash, int $format = null, PictureManager $pictureManager)
+    public function getPicture(string $hash, PictureManager $pictureManager)
     {
         if (($picture = $pictureManager->find($hash)) === null) {
             throw new NotFoundHttpException('pictures.not_found');
         }
-        if ($format === null) {
-            $format = $picture->getSmallestFormat();
+        return new JsonResponse($picture);
+    }
+
+    /** 
+     * @Route("/pictures/{hash}/{format}", name="get_formatted_picture", methods={"GET"})
+     */
+    public function getFormattedPicture(string $hash, int $format, PictureManager $pictureManager)
+    {
+        if (($picture = $pictureManager->find($hash)) === null) {
+            throw new NotFoundHttpException('pictures.not_found');
         }
         if (!$picture->hasFormat($format)) {
             throw new BadRequestHttpException('pictures.invalid_format');

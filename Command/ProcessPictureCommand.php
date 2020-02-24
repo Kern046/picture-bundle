@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Kern\PictureBundle\Manager\PictureManager;
 use Kern\PictureBundle\Registry\PictureRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Picture\Bundle\Entity\Picture;
+use Kern\PictureBundle\Entity\Picture;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProcessPictureCommand extends Command
@@ -36,7 +36,7 @@ class ProcessPictureCommand extends Command
     public function configure()
     {
         $this
-            ->setName('app:picture:process')
+            ->setName('kern:picture:process')
             ->setDescription('Process a picture in public/ repository')
             ->addArgument('file', InputArgument::REQUIRED, 'the file to process')
         ;
